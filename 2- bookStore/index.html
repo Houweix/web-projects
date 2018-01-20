@@ -6,12 +6,120 @@
 		<meta name="format-detection" content="telephone=no">
 		<link rel="stylesheet" href="css/reset.css">
 		<style type="text/css">
+			html{
+				width: 100%;
+				height: 100%;
+				overflow-x: hidden;
+			}
+			body{
+				text-align: left;
+				width: 100%;
+				overflow: hidden;
+				background: #e9dfc7;
+			}
+			.m-read-content{
+				font-size: 14px;
+				color: #555;
+				line-height: 31px;
+				padding: 15px;
+			}
 
+			.m-read-content p{
+				text-indent: 2em;
+				margin:  0.5em 0;
+				letter-spacing: 0;
+				line-height: 24px;
+			}
+
+			.m-read-content h4{
+				font-size: 20px;
+				color: #736357;
+				border-bottom: solid 1px #736357;
+				/*字符间距*/
+				letter-spacing: 2px;
+			}
+
+			.u-tab{
+				height: 34px;
+				margin:10px auto;
+				line-height: 34px;
+				border-radius: 8px;
+				border: 1px solid #858382;
+				font-size: 12px;
+				background: #000000;
+				opacity: 0.9;
+				/*兼容性问题*/
+				filter: alpha(opacity: 90);
+			}
+			.u-tab li{
+				display: inline-block;
+				width: 49%;
+				border-right: 1px solid #858382;
+				text-align: center;
+				color: #ffffff;
+			}
+
+			.u-tab li:nth-child(2){
+				/*注意下标从1开始*/
+				border-right: none;
+			}
+
+			.m-button-bar{
+				width: 70%;
+				max-width: 800px;
+				padding: 5px;
+				margin: 0 auto;
+
+			 }
 
 		</style>
 	</head>
 	<body>
+		<div id="root" class="container">
+			<div id="fiction_chapter_title"></div>
+			<div id="fiction_container" class="m-read-content">
+				<h4>nodejs——创建包</h4>
+				<p>
+					包是在模块基础上更深一步的抽象，Node.js 的包类似于 C/C++ 的函数库或者 Java/.Net
+					的类库。它将某个独立的功能封装起来，用于发布、更新、依赖管理和版本控制。Node.js 根
+					据 CommonJS 规范实现了包机制，开发了 npm来解决包的发布和获取需求。
+					包是在模块基础上更深一步的抽象，Node.js 的包类似于 C/C++ 的函数库或者 Java/.Net
+					的类库。它将某个独立的功能封装起来，用于发布、更新、依赖管理和版本控制。Node.js 根
+					据 CommonJS 规范实现了包机制，开发了 npm来解决包的发布和获取需求。
+				</p>
+				<p>
+					包是在模块基础上更深一步的抽象，Node.js 的包类似于 C/C++ 的函数库或者 Java/.Net
+					的类库。它将某个独立的功能封装起来，用于发布、更新、依赖管理和版本控制。Node.js 根
+					据 CommonJS 规范实现了包机制，开发了 npm来解决包的发布和获取需求。
+				</p>
+				<p>
+					包是在模块基础上更深一步的抽象，Node.js 的包类似于 C/C++ 的函数库或者 Java/.Net
+					的类库。它将某个独立的功能封装起来，用于发布、更新、依赖管理和版本控制。Node.js 根
+					据 CommonJS 规范实现了包机制，开发了 npm来解决包的发布和获取需求。
+				</p><p>
+				包是在模块基础上更深一步的抽象，Node.js 的包类似于 C/C++ 的函数库或者 Java/.Net
+				的类库。它将某个独立的功能封装起来，用于发布、更新、依赖管理和版本控制。Node.js 根
+				据 CommonJS 规范实现了包机制，开发了 npm来解决包的发布和获取需求。
+			</p><p>
+				包是在模块基础上更深一步的抽象，Node.js 的包类似于 C/C++ 的函数库或者 Java/.Net
+				的类库。它将某个独立的功能封装起来，用于发布、更新、依赖管理和版本控制。Node.js 根
+				据 CommonJS 规范实现了包机制，开发了 npm来解决包的发布和获取需求。
+			</p><p>
+				包是在模块基础上更深一步的抽象，Node.js 的包类似于 C/C++ 的函数库或者 Java/.Net
+				的类库。它将某个独立的功能封装起来，用于发布、更新、依赖管理和版本控制。Node.js 根
+				据 CommonJS 规范实现了包机制，开发了 npm来解决包的发布和获取需求。
+			</p>
 
+			</div>
+
+			<div class="m-button-bar">
+				<ul class="u-tab">
+					<li id="prev-button">上一章</li>
+					<li id="next-button">下一章</li>
+				</ul>
+			</div>
+
+		</div>
 
 
 
