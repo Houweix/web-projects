@@ -48,14 +48,24 @@ function drawBackground(){
         ctx.arc(x,y,2,0,2 * Math.PI,false);
         ctx.fill(); //注意这里是填充圆
     }
-    
-
-
-
 }
 
-drawBackground();
 
+
+//画出时针
+function drawHour(hour) {
+
+    ctx.beginPath();    //开始一条新路径
+    ctx.lineCap = 'round';  //线的末端变圆的
+    ctx.lineWidth = 8;      //宽度
+    ctx.moveTo(0,10);       //移动新路径到0,10处
+    ctx.lineTo(0, -r /2);
+    ctx.stroke();
+}
+
+
+drawBackground();
+drawHour(4);
 
 /*
 绘制时钟用到的canvas属性和方法
