@@ -514,7 +514,7 @@
                         Util.StorageSetter('background_color', color);
                         Util.StorageSetter('font_color', font);
 
-                        var fontColor = Util.StorageGetter('font_color');
+                        let fontColor = Util.StorageGetter('font_color');
                         //夜间模式
                         if (fontColor == '#4e534f') {
                             NightMode = true;
@@ -535,12 +535,12 @@
                         let colorArr = [{
                             value : '#f7eee5',
                             name : '米白',
-                            font : ''
+                            font : '',
+                            id : "font_normal"
                         }, {
                             value : '#e9dfc7',
                             name : '纸张',
-                            font : '',
-                            id : "font_normal"
+                            font : ''
                         }, {
                             value : '#a4a4a4',
                             name : '浅灰',
@@ -606,9 +606,7 @@
                         if (!InitFontSize) {
                             InitFontSize = 18;
                         }
-
                         RootContainer.css('font-size', InitFontSize);
-
                     })();
 
 					//日夜切换按钮的实现
@@ -617,15 +615,16 @@
 						if(NightMode){
                             $('#day_icon').hide();
                             $('#night_icon').show();
-                            // $('#font_normal').trigger('click');
+                            //切换夜间模式也就是模拟点击白天和黑夜
+                            $('#font_normal').trigger('click');	//日间模式点击
                             NightMode = false;
 						}else{
                             $('#day_icon').show();
                             $('#night_icon').hide();
-                            // $('#font_night').trigger('click');
+                            //切换夜间模式也就是模拟点击白天和黑夜
+                            $('#font_night').trigger('click');	//夜间模式点击
                             NightMode = true;
 						}
-
 					});
 
                     //按钮的多态样式效果
