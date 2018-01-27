@@ -321,7 +321,7 @@
 			</div>
 
 			<div class="m-button-bar">
-				<ul class="u-tab">
+				<ul class="u-tab" id="bottom_tool_bar_ul">
 					<li id="prev-button">上一章</li>
 					<li id="next-button">下一章</li>
 				</ul>
@@ -418,7 +418,7 @@
 					night_day_switch_button: $('#night-button'),
 					font_container: $('.font-container'),
                     bottom_tool_bar : $('#bottom_tool_bar'),
-                    nav_title : $('#nav_title'),
+                    // nav_title : $('#nav_title'),
                     bk_container : $('#bk-container'),
                     next_button : $('#next_button'),
                     prev_button : $('#prev_button'),
@@ -437,6 +437,7 @@
 				if(!initFontSize){
 				    initFontSize = 14;
 				}
+				//设置字号
 				RootContainer.css('font-size',initFontSize);
 
 				//是否是夜间模式的标志
@@ -445,7 +446,6 @@
 				//项目的入口函数
 				function main() {
                     EventHandle();
-
                 }
 
 				//实现和阅读器相关的数据交互的方法（服务器端）(M)
@@ -477,7 +477,7 @@
 					$('#font-button').click(function () {
                         if(Dom.font_container.css('display') == 'none'){
                             Dom.font_container.show();
-                            $(this).addClass('current');
+                            $(this).addClass('current');	//增加橘黄样式
                         }else{
                             Dom.font_container.hide();
                             $(this).removeClass('current');
@@ -491,6 +491,8 @@
                         var font = $(this).data('font');
                         var bottomcolor = $(this).data('bottomcolor');
                         var tool_bar = font;
+
+                        //先清空全部样式，然后给当前点击的那个增加样式
                         Dom.bk_container.find('.bk-container-current').hide();
                         $(this).find('.bk-container-current').show();
                         if (!font) {
@@ -636,8 +638,6 @@
                         $(this).css('background', 'none');
                     });
 
-
-
                     //字体放大
                     $('#large-font').click(function () {
                         if(initFontSize > 20){
@@ -664,9 +664,7 @@
                         Dom.bottom_nav.hide();
                         Dom.top_nav.hide();
                         Dom.font_container.hide();
-
                     })
-
 				}
 
 				main();
