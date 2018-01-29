@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
     <meta name="format-detection" content="telephone=no">
+    <title>BookStore</title>
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -91,8 +92,9 @@
 <script src="js/jquery.base64.js"></script>
 <script src="js/jquery.jsonp.js"></script>
 <script>
-    // 提供本地化存储支持
     (function () {
+
+        // 提供本地化存储支持
         let Util = (function () {
             // 防止key被覆盖，加一个前置
             let prefix = 'html5_reder_';
@@ -105,6 +107,11 @@
             // 存数据
             let StorageSetter = function (key, val) {
                 return localStorage.setItem(prefix + key, val);
+            };
+
+            //判断数据是否存在
+            let hasStorage = function (key) {
+                return localStorage.hasOwnProperty(prefix + key);
             };
 
             //获取加密的jsonp数据
@@ -127,7 +134,8 @@
             return {
                 StorageGetter: StorageGetter,
                 StorageSetter: StorageSetter,
-                getBSONP: getBSONP
+                getBSONP: getBSONP,
+                hasStorage: hasStorage
             };
         })();
 
@@ -147,7 +155,8 @@
         let Win = $(window);
         let Doc = $(document);
         let RootContainer = $('#fiction_container');
-
+        let readerModel;
+        let readerUI;
 
         //初始化字号
         let initFontSize = Util.StorageGetter('font_size');
@@ -164,8 +173,9 @@
 
         //项目的入口函数
         function main() {
-            let readerModel = ReaderModel();
-            let readerUI = ReaderBaseFrame(RootContainer);
+            readerModel = ReaderModel();
+            readerUI = ReaderBaseFrame(RootContainer);
+
             readerModel.init(function (data) {
                 readerUI(data);
             });
@@ -177,6 +187,7 @@
         //实现和阅读器相关的数据交互的方法（服务器端）(M)
         function ReaderModel() {
             let Chapter_id;
+            let ChapterTotal;
             //初始化获取信息
             let init = function (UIcallback) {
                 getFictionInfo(function () {
@@ -186,15 +197,23 @@
                 });
             };
 
+            //获得章节信息
             let getFictionInfo = function (callback) {
                 $.get('data/chapter.json', function (data) {
                     //获得章节信息之后的回调
-                    Chapter_id = data.chapters[1].chapter_id;
+                    //记忆上次最后章节
+
+                    Chapter_id = Util.hasStorage('last_chapter_id')
+                        ? Util.StorageGetter('last_chapter_id')
+                        : data.chapters[1].chapter_id;
+
+                    ChapterTotal = data.chapters.length;
                     callback && callback();
                 }, 'json');
 
             };
 
+            //获得每节的详细内容
             let getCurChapterContent = function (chapter_id, callback) {
                 $.get('data/data' + chapter_id + '.json', function (data) {
                     if (data.result == 0) {
@@ -207,9 +226,34 @@
                     }
                 }, 'json');
             };
+
+            //上一章
+            let prevChapter = function (UIcallback) {
+                Chapter_id = parseInt(Chapter_id,10);
+                if(Chapter_id == 1){
+                    return;
+                }
+                Chapter_id -= 1;
+                getCurChapterContent(Chapter_id,UIcallback);
+                //将最新的阅读进度的页数
+                Util.StorageSetter('last_chapter_id',Chapter_id);
+            };
+
+            //下一章
+            let nextChapter = function (UIcallback) {
+                Chapter_id = parseInt(Chapter_id,10);
+                if(Chapter_id == ChapterTotal){
+                    return;
+                }
+                Chapter_id += 1;
+                getCurChapterContent(Chapter_id,UIcallback);
+                Util.StorageSetter('last_chapter_id',Chapter_id);
+            };
             //将init方法传递出去
             return {
-                init: init
+                init: init,
+                prevChapter: prevChapter,
+                nextChapter: nextChapter
             };
         }
 
@@ -434,7 +478,30 @@
                 Dom.bottom_nav.hide();
                 Dom.top_nav.hide();
                 Dom.font_container.hide();
-            })
+            });
+
+
+            //上一章事件的处理
+            $('#prev-button').click(function () {
+                readerModel.prevChapter(function (data) {
+                    readerUI(data);
+                    //数据加载完成后跳转到顶部
+                    window.scrollTo(0,0);
+                });
+
+            });
+
+            //下一章事件的处理
+            $('#next-button').click(function () {
+                readerModel.nextChapter(function (data) {
+                    readerUI(data);
+                    //数据加载完成后跳转到顶部
+                    window.scrollTo(0,0);
+                });
+            });
+
+
+
         }
 
         main();
