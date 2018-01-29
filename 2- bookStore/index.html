@@ -198,51 +198,52 @@
                 //         UIcallback && UIcallback(data);
                 //     });
                 // });
-
                 //es6 promise
-                getFictionInfoPromise.then(function () {
-                    getCurChapterContent(Chapter_id, function (data) {
-                        UIcallback && UIcallback(data);
-                    });
+                getFictionInfoPromise().then(function (d) {
+                    //执行完成后会执行获取内容的promise对象
+                    return getCurChapterContentPromise();
+                }).then(function (data) {
+                    UIcallback && UIcallback(data);
                 });
             };
 
-            let getFictionInfoPromise = new Promise(function (resolve, reject) {
-                $.get('data/chapter.json', function (data) {
-                   if(data.result == 0){
-                       //成功
+            let getFictionInfoPromise = function () {
+                return new Promise(function (resolve, reject) {
+                    $.get('data/chapter.json', function (data) {
+                        if (data.result == 0) {
+                            //成功
 
-                       //记忆上次最后章节
-                       Chapter_id = Util.hasStorage('last_chapter_id')
-                           ? Util.StorageGetter('last_chapter_id')
-                           : data.chapters[1].chapter_id;
+                            //记忆上次最后章节
+                            Chapter_id = Util.hasStorage('last_chapter_id')
+                                ? Util.StorageGetter('last_chapter_id')
+                                : data.chapters[1].chapter_id;
 
-                       ChapterTotal = data.chapters.length;
-                       resolve();
-                   }else{
-                       //失败
-                       reject();
-                   }
-                }, 'json');
-            });
-
-            // 获得章节信息
-            let getFictionInfo = function (callback) {
-                $.get('data/chapter.json', function (data) {
-                    //获得章节信息之后的回调
-                    //记忆上次最后章节
-
-                    Chapter_id = Util.hasStorage('last_chapter_id')
-                        ? Util.StorageGetter('last_chapter_id')
-                        : data.chapters[1].chapter_id;
-
-                    ChapterTotal = data.chapters.length;
-                    callback && callback();
-                }, 'json');
-
+                            ChapterTotal = data.chapters.length - 1;
+                            resolve();
+                        } else {
+                            //失败
+                            reject();
+                        }
+                    }, 'json');
+                });
             };
+            // 获得章节信息
+            // let getFictionInfo = function (callback) {
+            //     $.get('data/chapter.json', function (data) {
+            //         //获得章节信息之后的回调
+            //         //记忆上次最后章节
+            //
+            //         Chapter_id = Util.hasStorage('last_chapter_id')
+            //             ? Util.StorageGetter('last_chapter_id')
+            //             : data.chapters[1].chapter_id;
+            //
+            //         ChapterTotal = data.chapters.length;
+            //         callback && callback();
+            //     }, 'json');
+            //
+            // };
 
-            //获得每节的详细内容
+            // 获得每节的详细内容
             let getCurChapterContent = function (chapter_id, callback) {
                 $.get('data/data' + chapter_id + '.json', function (data) {
                     if (data.result == 0) {
@@ -256,27 +257,45 @@
                 }, 'json');
             };
 
+            let getCurChapterContentPromise = function () {
+                return new Promise(function (resolve, reject) {
+                    $.get('data/data' + Chapter_id + '.json', function (data) {
+                        if (data.result == 0) {
+                            //服务器端ok——成功
+                            let url = data.jsonp;
+                            //首先发送jsonp请求
+                            Util.getBSONP(url, function (data) {
+                                // callback && callback(data);
+                                resolve(data);
+                            });
+                        } else {
+                            //失败
+                            reject({msg: 'fail'});
+                        }
+                    }, 'json');
+                });
+            };
             //上一章
             let prevChapter = function (UIcallback) {
-                Chapter_id = parseInt(Chapter_id,10);
-                if(Chapter_id == 1){
+                Chapter_id = parseInt(Chapter_id, 10);
+                if (Chapter_id == 1) {
                     return;
                 }
                 Chapter_id -= 1;
-                getCurChapterContent(Chapter_id,UIcallback);
+                getCurChapterContent(Chapter_id, UIcallback);
                 //将最新的阅读进度的页数
-                Util.StorageSetter('last_chapter_id',Chapter_id);
+                Util.StorageSetter('last_chapter_id', Chapter_id);
             };
 
             //下一章
             let nextChapter = function (UIcallback) {
-                Chapter_id = parseInt(Chapter_id,10);
-                if(Chapter_id == ChapterTotal){
+                Chapter_id = parseInt(Chapter_id, 10);
+                if (Chapter_id == 4) {
                     return;
                 }
                 Chapter_id += 1;
-                getCurChapterContent(Chapter_id,UIcallback);
-                Util.StorageSetter('last_chapter_id',Chapter_id);
+                getCurChapterContent(Chapter_id, UIcallback);
+                Util.StorageSetter('last_chapter_id', Chapter_id);
             };
             //将init方法传递出去
             return {
@@ -293,10 +312,11 @@
                 let jsonObj = JSON.parse(jsonData);
                 let html = '<h4>' + jsonObj.t + '</h4>';
                 for (let i = 0; i < jsonObj.p.length; i++) {
-                    html+="<p>" + jsonObj.p[i] + "</p>";
+                    html += "<p>" + jsonObj.p[i] + "</p>";
                 }
                 return html;
             }
+
             return function (data) {
                 container.html(parseChapterData(data));
             }
@@ -508,7 +528,7 @@
                 readerModel.prevChapter(function (data) {
                     readerUI(data);
                     //数据加载完成后跳转到顶部
-                    window.scrollTo(0,0);
+                    window.scrollTo(0, 0);
                 });
 
             });
@@ -518,7 +538,7 @@
                 readerModel.nextChapter(function (data) {
                     readerUI(data);
                     //数据加载完成后跳转到顶部
-                    window.scrollTo(0,0);
+                    window.scrollTo(0, 0);
                 });
             });
 
