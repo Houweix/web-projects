@@ -94,6 +94,8 @@
 <script>
     (function () {
 
+        //使用严格模式，否则会报错
+        'use strict';
         // 提供本地化存储支持
         let Util = (function () {
             // 防止key被覆盖，加一个前置
@@ -168,6 +170,7 @@
         //设置字号
         RootContainer.css('font-size', initFontSize);
 
+
         //是否是夜间模式的标志
         let NightMode = false;
 
@@ -190,14 +193,40 @@
             let ChapterTotal;
             //初始化获取信息
             let init = function (UIcallback) {
-                getFictionInfo(function () {
+                // getFictionInfo(function () {
+                //     getCurChapterContent(Chapter_id, function (data) {
+                //         UIcallback && UIcallback(data);
+                //     });
+                // });
+
+                //es6 promise
+                getFictionInfoPromise.then(function () {
                     getCurChapterContent(Chapter_id, function (data) {
                         UIcallback && UIcallback(data);
                     });
                 });
             };
 
-            //获得章节信息
+            let getFictionInfoPromise = new Promise(function (resolve, reject) {
+                $.get('data/chapter.json', function (data) {
+                   if(data.result == 0){
+                       //成功
+
+                       //记忆上次最后章节
+                       Chapter_id = Util.hasStorage('last_chapter_id')
+                           ? Util.StorageGetter('last_chapter_id')
+                           : data.chapters[1].chapter_id;
+
+                       ChapterTotal = data.chapters.length;
+                       resolve();
+                   }else{
+                       //失败
+                       reject();
+                   }
+                }, 'json');
+            });
+
+            // 获得章节信息
             let getFictionInfo = function (callback) {
                 $.get('data/chapter.json', function (data) {
                     //获得章节信息之后的回调
@@ -415,14 +444,6 @@
                     $('#night_icon').hide();
                     $('#bottom_tool_bar_ul').css('opacity', '0.6');
                 }
-
-                //字体设置信息
-                InitFontSize = Util.StorageGetter('font_size');
-                InitFontSize = parseInt(InitFontSize);
-                if (!InitFontSize) {
-                    InitFontSize = 18;
-                }
-                RootContainer.css('font-size', InitFontSize);
             })();
 
             //日夜切换按钮的实现
@@ -478,6 +499,7 @@
                 Dom.bottom_nav.hide();
                 Dom.top_nav.hide();
                 Dom.font_container.hide();
+                $('#font-button').removeClass('current');
             });
 
 
@@ -499,8 +521,6 @@
                     window.scrollTo(0,0);
                 });
             });
-
-
 
         }
 
