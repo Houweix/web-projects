@@ -1,5 +1,3 @@
-[![Travis](https://img.shields.io/travis/rust-lang/rust.svg)]()
-
 ## 1-Canvas Clock
 
 一个HTML5 Canvas制作的时钟。
