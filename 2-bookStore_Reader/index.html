@@ -265,7 +265,6 @@
                             let url = data.jsonp;
                             //首先发送jsonp请求
                             Util.getBSONP(url, function (data) {
-                                // callback && callback(data);
                                 resolve(data);
                             });
                         } else {
