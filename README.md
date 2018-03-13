@@ -11,7 +11,7 @@
 
 一个基于webview的webapp阅读器的开发,可以实现将json格式的数据按章节显示在阅读器上，可以调整阅读器的字体大小、主题、阅读进度记忆等功能，在用户的交互体验上有优化。
 
-### [在线预览](http://www.ihouwei.com/bookStore/) ###
+### [在线预览(移动端)](http://www.ihouwei.com/bookStore/) ###
 
 
 ### 主要技术
