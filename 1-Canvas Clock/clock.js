@@ -1,72 +1,120 @@
 //获取canvas对象
-let clock = document.getElementById('clock');
+var clock = document.getElementById('clock');
 //获取时钟的上下文
-let ctx = clock.getContext('2d');
-let width = ctx.canvas.width;   //获取宽
-let height = ctx.canvas.height; //获取高
-let r = width / 2;              //半径为宽一半
+var ctx = clock.getContext('2d');
+var width = ctx.canvas.width;   //获取宽
+var height = ctx.canvas.height; //获取高
+var r = width / 2;              //半径为宽一半
+var rem = width / 300;          //比例
 
-//画出圆
-function drawBackground(){
-    ctx.translate(r,r); //将圆的圆心移动到r，r
+function draw() {
+    ctx.save();         //1、保存当前环境的状态
+    ctx.translate(r, r);//改变画布圆点位置到（r，r）（默认左上角即（0， 0））
     ctx.beginPath();
-    ctx.lineWidth = 10; //设置圆的线宽10
-    ctx.arc(0,0,r-5,0,2 * Math.PI, false);
+    ctx.lineWidth = 10 * rem;
+    ctx.arc(0, 0, r - ctx.lineWidth / 2, 0, 2 * Math.PI, false);//false默认顺时针，可不写
     ctx.stroke();
-    //注意画圆的函数arc是从3点的位置开始的
-
-    let hourNumber = [3,4,5,6,7,8,9,10,11,12,1,2];
-    ctx.font = "21px Arial";
-    //在填充文本之前设置文本对齐
+    //小时数
+    var arr = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2];
+    ctx.font = 30 * rem + 'px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-
-    //遍历时钟
-    hourNumber.forEach(function(number, i){
-        //把圆盘的12个小时平分
-        let rad = 2 * Math.PI /12 * i;
-        //cos和sin函数参数为弧度, -30是为了远离圆盘
-        let x = Math.cos(rad) * (r - 30);
-        let y = Math.sin(rad) * (r - 30);
-        ctx.fillText(number, x, y);
+    arr.forEach(function (num, i) {
+        var rad = 2 * Math.PI / 12 * i;//弧度
+        var x = Math.cos(rad) * (r - 35 * rem);//坐标
+        var y = Math.sin(rad) * (r - 35 * rem);
+        ctx.fillText(num, x, y);
     });
-
-    //显示分钟数
-    for(let i = 0; i<60 ;i++){
-        //60个点
-        let rad = 2 * Math.PI / 60 * i;
-        let x = Math.cos(rad) * (r - 15);
-        let y = Math.sin(rad) * (r - 15);
-        ctx.beginPath();    //重新绘制
-
+    //秒针的60个点
+    for (var i = 0; i < 60; i++) {
+        var rad = 2 * Math.PI / 60 * i;//弧度
+        var x = Math.cos(rad) * (r - 15 * rem);//坐标
+        var y = Math.sin(rad) * (r - 15 * rem);
+        ctx.beginPath();
         if (i % 5 === 0) {
-            //小时黑色，其他灰色
             ctx.fillStyle = '#000';
-        }else{
-            ctx.fillStyle = '#a7a7a7';
+            ctx.arc(x, y, 2 * rem, 0, 2 * Math.PI);
+        } else {
+            ctx.fillStyle = '#ccc';
+            ctx.arc(x, y, 2 * rem, 0, 2 * Math.PI);
         }
-        ctx.arc(x,y,2,0,2 * Math.PI,false);
-        ctx.fill(); //注意这里是填充圆
+        ctx.fill();
     }
 }
 
-
-
-//画出时针
-function drawHour(hour) {
-
-    ctx.beginPath();    //开始一条新路径
-    ctx.lineCap = 'round';  //线的末端变圆的
-    ctx.lineWidth = 8;      //宽度
-    ctx.moveTo(0,10);       //移动新路径到0,10处
-    ctx.lineTo(0, -r /2);
+//时针
+function drawHour(hour, minute) {
+    //保存当前状态，时针改变后恢复
+    ctx.save();
+    ctx.beginPath();
+    var rad = 2 * Math.PI / 12 * hour;
+    var mrad = 2 * Math.PI / 12 / 60 * minute;
+    ctx.rotate(rad + mrad);
+    ctx.lineWidth = 6 * rem;
+    ctx.lineCap = 'round';
+    ctx.moveTo(0, 10 * rem);
+    ctx.lineTo(0, -r + 80 * rem);
     ctx.stroke();
+    ctx.restore();
 }
 
+//分针
+function drawMinute(minute) {
+    //保存当前状态，分针改变后恢复
+    ctx.save();
+    ctx.beginPath();
+    var rad = 2 * Math.PI / 60 * minute;
+    ctx.rotate(rad);
+    ctx.lineWidth = 4 * rem;
+    ctx.lineCap = 'round';
+    ctx.moveTo(0, 10 * rem);
+    ctx.lineTo(0, -r + 50 * rem);
+    ctx.stroke();
+    ctx.restore();
+}
 
-drawBackground();
-drawHour(4);
+//秒针
+function drawSecond(second) {
+    //保存当前状态，秒针改变后恢复
+    ctx.save();
+    ctx.beginPath();
+    var rad = 2 * Math.PI / 60 * second;
+    ctx.rotate(rad);
+    ctx.fillStyle = 'red';
+    ctx.moveTo(-2 * rem, 20 * rem);
+    ctx.lineTo(2 * rem, 20 * rem);
+    ctx.lineTo(1 * rem, -r + 20 * rem);
+    ctx.lineTo(-1 * rem, -r + 20 * rem);
+    ctx.fill();
+    ctx.restore();
+}
 
+//中间圆点
+function drawDot() {
+    ctx.beginPath();
+    ctx.fillStyle = '#fff';
+    ctx.arc(0, 0, 3 * rem, 0, 2 * Math.PI);
+    ctx.fill();
+}
+
+//绘制动态时钟
+function drawClock() {
+    var now = new Date(),
+        hour = now.getHours();
+    minute = now.getMinutes();
+    second = now.getSeconds();
+    //清除整个画布，重画
+    ctx.clearRect(0, 0, width, height);
+    draw();
+    drawHour(hour, minute);
+    drawMinute(minute);
+    drawSecond(second);
+    drawDot();
+    //2、返回之前保存过的路径状态和属性（还原圆点）
+    ctx.restore();
+}
+
+setInterval(drawClock, 1000);
 /*
 绘制时钟用到的canvas属性和方法
 1、fillStyle：设置或返回用于填充绘画的颜色、渐变或模式。
