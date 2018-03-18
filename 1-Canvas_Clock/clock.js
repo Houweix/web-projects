@@ -132,7 +132,7 @@ setInterval(drawClock, 1000);
 13、rotate(): 旋转绘图。
 14、fillText()：在画布上绘制“被填充的”文本。 context.fillText(text,x,y,maxWidth);
 15、font 	设置或返回文本内容的当前字体属性
-textAlign 	设置或返回文本内容的当前对齐方式（水平对齐方式）
-textBaseline 	设置或返回在绘制文本时使用的当前文本基线(垂直对齐方式)
+16、textAlign 	设置或返回文本内容的当前对齐方式（水平对齐方式）
+17、textBaseline 	设置或返回在绘制文本时使用的当前文本基线(垂直对齐方式)
 
 */

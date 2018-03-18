@@ -5,26 +5,26 @@
 ### 技术 & API函数
 主要使用H5的canvas绘制。
 #### 使用的API方法列表：
-1、fillStyle：设置或返回用于填充绘画的颜色、渐变或模式。
-2、lineCap：设置或返回线条的结束端点样式。(butt默认/ round向线条的每个末端添加圆形线帽/ square向线条的每个末端添加正方形线帽)
-3、lineWidth ：设置或返回当前的线条宽度。示例：ctx.lineWidth = 10;
-4、fillRect() :绘制“被填充”的矩形。context.fillRect(x,y,width,height);
-5、clearRect ：在给定的矩形内清除指定的像素。context.clearRect(x,y,width,height);
-6、fill();
-7、stroke();     绘制已定义的路径
-8、beginPath()   起始一条路径，或重置当前路径
-9、closePath();  创建从当前点到起始点的路径
-10、moveTo()、lineTo();
-11、arc() :画圆 。context.arc(x,y,r,sAngle,eAngle,counterclockwise);
-12、translate(): 改变画布圆点位置。
-13、rotate(): 旋转绘图。
-14、fillText()：在画布上绘制“被填充的”文本。 context.fillText(text,x,y,maxWidth);
-15、font 	设置或返回文本内容的当前字体属性
-16、textAlign 	设置或返回文本内容的当前对齐方式（水平对齐方式）
-17、textBaseline 	设置或返回在绘制文本时使用的当前文本基线(垂直对齐方式)
+1. fillStyle：设置或返回用于填充绘画的颜色、渐变或模式。
+2. lineCap：设置或返回线条的结束端点样式。(butt默认/ round向线条的每个末端添加圆形线帽/ square向线条的每个末端添加正方形线帽)
+3. lineWidth ：设置或返回当前的线条宽度。示例：ctx.lineWidth = 10;
+4. fillRect() :绘制“被填充”的矩形。context.fillRect(x,y,width,height);
+5. clearRect ：在给定的矩形内清除指定的像素。context.clearRect(x,y,width,height);
+6. fill();
+7. stroke();     绘制已定义的路径
+8. beginPath()   起始一条路径，或重置当前路径
+9. closePath();  创建从当前点到起始点的路径
+10. moveTo()、lineTo();
+11. arc() :画圆 。context.arc(x,y,r,sAngle,eAngle,counterclockwise);
+12. translate(): 改变画布圆点位置。
+13. rotate(): 旋转绘图。
+14. fillText()：在画布上绘制“被填充的”文本。 context.fillText(text,x,y,maxWidth);
+15. font 	设置或返回文本内容的当前字体属性
+16. textAlign 	设置或返回文本内容的当前对齐方式（水平对齐方式）
+17. textBaseline 	设置或返回在绘制文本时使用的当前文本基线(垂直对齐方式)
 
 ### 界面
-![](https://github.com/Houweix/web-projects/raw/master/1-Canvas Clock/show.png)
+![](https://github.com/Houweix/web-projects/raw/master/1-Canvas_Clock/show.png)
 
 
 ## 2-BookStore_Reader
