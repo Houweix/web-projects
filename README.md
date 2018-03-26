@@ -10,8 +10,8 @@
 3. lineWidth ：设置或返回当前的线条宽度。示例：ctx.lineWidth = 10;
 4. fillRect() :绘制“被填充”的矩形。context.fillRect(x,y,width,height);
 5. clearRect ：在给定的矩形内清除指定的像素。context.clearRect(x,y,width,height);
-6. fill();
-7. stroke();     绘制已定义的路径
+6. fill();       填充
+7. stroke();     绘制已定义的路径
 8. beginPath()   起始一条路径，或重置当前路径
 9. closePath();  创建从当前点到起始点的路径
 10. moveTo()、lineTo();
@@ -79,10 +79,4 @@ let getCurChapterContentPromise = function () {
                     resolve(data);
                 });
             } else {
-                //失败
-                reject({msg: 'fail'});
-            }
-        }, 'json');
-    });
-};
-```
+            
